@@ -3,7 +3,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "start": "php artisan serve --port=4000",
+        "php": "php artisan"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
