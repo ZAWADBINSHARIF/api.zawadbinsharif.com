@@ -4,13 +4,9 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Page;
 use App\Enums\StoragePath;
-use App\Filament\Resources\ProfileResource\Pages;
-use App\Filament\Resources\ProfileResource\RelationManagers;
 use App\Models\Profile as ProfileModel;
-use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TagsInput;
@@ -19,11 +15,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 
 class Profile extends Page implements HasForms
@@ -66,17 +57,18 @@ class Profile extends Page implements HasForms
         return $form
             ->statePath('data')
             ->schema([
-                Section::make()
+                Section::make('Basic Information')
                     ->schema([
-                        TextInput::make("full_name"),
-                        TextInput::make("short_title"),
-                        RichEditor::make("introduction"),
-                        RichEditor::make("about_me"),
+                        TextInput::make("full_name")->required(),
+                        TextInput::make("short_title")->required(),
+                        RichEditor::make("introduction")->required(),
+                        RichEditor::make("about_me")->required(),
                     ])->columnSpan(2),
-                Section::make()
+                Section::make('Files & Skills')
                     ->schema([
                         FileUpload::make("image")
                             ->image()
+                            ->previewable()
                             ->rules([
                                 'mimetypes:image/jpeg,image/png',
                                 'max:512'
@@ -84,7 +76,8 @@ class Profile extends Page implements HasForms
                             ->maxSize(512)
                             ->acceptedFileTypes(['image/jpeg', 'image/png'])
                             ->disk('public')
-                            ->directory(StoragePath::PROFILE_IMAGE->value),
+                            ->directory(StoragePath::PROFILE_IMAGE->value)
+                            ->required(),
                         FileUpload::make("resume")
                             ->rules([
                                 'mimetypes:application/pdf',
@@ -93,8 +86,38 @@ class Profile extends Page implements HasForms
                             ->maxSize(10240)
                             ->acceptedFileTypes(['application/pdf'])
                             ->disk('public')
-                            ->directory(StoragePath::RESUME->value),
-                        TagsInput::make("worked_technologies"),
+                            ->directory(StoragePath::RESUME->value)->required(),
+                        TagsInput::make("worked_technologies")->required(),
+                    ])->columnSpan(1),
+                Section::make('Contact Information')
+                    ->schema([
+                        TextInput::make("email")
+                            ->email()
+                            ->label('Email Address'),
+                        TextInput::make("phone")
+                            ->tel()
+                            ->label('Phone Number'),
+                        TextInput::make("location")
+                            ->label('Location'),
+                        TagsInput::make("availability")
+                            ->label('Available For')
+                            ->placeholder('Add services you offer')
+                            ->helperText('Services you are available for (e.g., Fullstack Development, Consulting)'),
+                    ])->columnSpan(2),
+                Section::make('Social Links')
+                    ->schema([
+                        TextInput::make("github")
+                            ->url()
+                            ->label('GitHub URL')
+                            ->prefix('https://'),
+                        TextInput::make("linkedin")
+                            ->url()
+                            ->label('LinkedIn URL')
+                            ->prefix('https://'),
+                        TextInput::make("twitter")
+                            ->url()
+                            ->label('Twitter/X URL')
+                            ->prefix('https://'),
                     ])->columnSpan(1),
             ])->columns(3);
     }

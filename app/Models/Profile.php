@@ -14,11 +14,19 @@ class Profile extends Model
         'about_me',
         'image',
         'resume',
-        'worked_technologies'
+        'worked_technologies',
+        'email',
+        'phone',
+        'location',
+        'github',
+        'linkedin',
+        'twitter',
+        'availability'
     ];
 
     protected $casts = [
         'worked_technologies' => 'array',
+        'availability' => 'array',
     ];
 
 

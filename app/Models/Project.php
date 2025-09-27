@@ -6,5 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-   
+    protected $fillable = [
+        'name',
+        'image',
+        'introduction',
+        'technology',
+        'github_link',
+        'view_link',
+    ];
+
+    protected $casts = [
+        'technology' => 'array',
+    ];
 }
