@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ContactResource\Pages;
+use App\Filament\Resources\ContactSubmissionResource\Pages;
 use App\Models\ContactSubmission;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,21 +11,21 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContactResource extends Resource
+class ContactSubmissionResource extends Resource
 {
     protected static ?string $model = ContactSubmission::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
-    
+
     protected static ?string $navigationLabel = 'Contact Messages';
-    
+
     protected static ?int $navigationSort = 3;
-    
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('status', 'new')->count() ?: null;
     }
-    
+
     public static function getNavigationBadgeColor(): ?string
     {
         return static::getModel()::where('status', 'new')->count() > 0 ? 'danger' : null;
@@ -53,7 +53,7 @@ class ContactResource extends Resource
                             ->disabled()
                             ->maxLength(255),
                     ])->columns(3),
-                    
+
                 Forms\Components\Section::make('Message')
                     ->schema([
                         Forms\Components\Textarea::make('message')
@@ -63,7 +63,7 @@ class ContactResource extends Resource
                             ->rows(5)
                             ->columnSpanFull(),
                     ]),
-                    
+
                 Forms\Components\Section::make('Metadata')
                     ->schema([
                         Forms\Components\TextInput::make('ip_address')
@@ -74,7 +74,7 @@ class ContactResource extends Resource
                             ->disabled()
                             ->columnSpan(2),
                     ])->columns(3),
-                    
+
                 Forms\Components\Section::make('Admin Response')
                     ->schema([
                         Forms\Components\Select::make('status')
@@ -152,11 +152,11 @@ class ContactResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
             ])
@@ -171,12 +171,12 @@ class ContactResource extends Resource
                     Tables\Actions\BulkAction::make('markAsRead')
                         ->label('Mark as Read')
                         ->icon('heroicon-o-eye')
-                        ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => 'read']))
+                        ->action(fn(\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => 'read']))
                         ->deselectRecordsAfterCompletion(),
                     Tables\Actions\BulkAction::make('markAsArchived')
                         ->label('Archive')
                         ->icon('heroicon-o-archive-box')
-                        ->action(fn (\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => 'archived']))
+                        ->action(fn(\Illuminate\Database\Eloquent\Collection $records) => $records->each->update(['status' => 'archived']))
                         ->deselectRecordsAfterCompletion(),
                 ]),
             ]);

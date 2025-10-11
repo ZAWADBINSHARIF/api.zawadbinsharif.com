@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ContactResource\Pages;
 
 use App\Filament\Resources\ContactResource;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListContacts extends ListRecords
@@ -12,7 +13,7 @@ class ListContacts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // Removed create action - messages come from frontend form
+            Actions\CreateAction::make(),
         ];
     }
 }
