@@ -16,6 +16,7 @@ class Profile extends Controller
                 'message' => 'No profile found'
             ], 404);
         }
+
         return response()->json([
             'profile' => [
                 'name' => $profileInfo->full_name,
@@ -31,6 +32,7 @@ class Profile extends Controller
                 'phone' => $profileInfo->phone,
                 'location' => $profileInfo->location,
                 'availability' => $profileInfo->availability,
+                'worked_technologies' => $profileInfo->worked_technologies
             ]
         ]);
     }
