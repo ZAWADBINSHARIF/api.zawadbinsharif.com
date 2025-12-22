@@ -8,7 +8,7 @@ class Project extends Controller
 {
     public function index()
     {
-        $projects = ProjectModel::orderBy('created_at', 'desc')->get();
+        $projects = ProjectModel::orderBy('sort_order', 'asc')->get();
         
         return response()->json([
             'projects' => $projects->map(function ($project) {

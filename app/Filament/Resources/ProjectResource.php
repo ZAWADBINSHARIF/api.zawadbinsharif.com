@@ -176,7 +176,8 @@ class ProjectResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('sort_order', 'asc')
+            ->reorderable('sort_order');
     }
 
     public static function getRelations(): array
